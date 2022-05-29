@@ -18,8 +18,6 @@ import android.widget.Toast;
 для изменения параметров клиента в Таблице: "Clients"
  */
 public class EditClient extends MainActivity implements View.OnClickListener {
-    //Метки полей для ввода данных
-    TextView txtPhonesClient, txtNameClient, txtIndividualDiscountClient;
     //Поля для ввода данных
     EditText idClient, nameClient, phonesClient, individualDiscountClient;
     //Кнопка сохранения измененного клиента в Таблицу: "Clients"
@@ -101,15 +99,10 @@ public class EditClient extends MainActivity implements View.OnClickListener {
                     btnShow.setClickable(false);
                     break;
                 }
-
                 cv.put("id", idClient.getText().toString());
                 cv.put("name", nameClient.getText().toString());
                 cv.put("phones", phonesClient.getText().toString());
                 cv.put("individualDiscount", individualDiscountClient.getText().toString());
-                System.out.println(idClient.getText().toString());
-                System.out.println(nameClient.getText().toString());
-                System.out.println(phonesClient.getText().toString());
-                System.out.println(individualDiscountClient.getText().toString());
                 //Обработка пустого ввода
                 if (!(id.equals("") && name.equals("")
                         && phones.equals("") && individualDiscount.equals(""))) {

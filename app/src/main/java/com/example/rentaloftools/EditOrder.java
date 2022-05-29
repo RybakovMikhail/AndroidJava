@@ -15,78 +15,94 @@ import android.widget.Toast;
 
 /*
 Программный класс - наследник главной активности,
-для изменения параметров клиента в Таблице: "Clients"
+для изменения параметров заказа в Таблице: "Orders"
  */
 public class EditOrder extends MainActivity implements View.OnClickListener {
-    //Метки полей для ввода данных
-    TextView txtPhonesClient, txtNameClient, txtIndividualDiscountClient;
     //Поля для ввода данных
-    EditText idClient, nameClient, phonesClient, individualDiscountClient;
-    //Кнопка сохранения измененного клиента в Таблицу: "Clients"
+    EditText editIdOrder, editIdClientOrder, editMoneyOrder, editStartdateOrder,
+           editTimeOrder, editStatusOrder, editIdInstrumentsOrder;
+    //Кнопка сохранения измененного клиента в Таблицу: "Orders"
     Button btnSave;
-    //Кнопка отображения параметров выбранного клиента
+    //Кнопка отображения параметров выбранного заказа
     Button btnShow;
     //Объект для работы с очередью сообщений
     final Handler handler = new Handler();
-    //Количество строк в Таблице: "Clients"
-    int countClients = 0;
+    //Количество строк в Таблице: "Orders"
+    int countOrders = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editclient);
-        idClient = (EditText) findViewById(R.id.idClient);
-        nameClient = (EditText) findViewById(R.id.nameClient);
-        phonesClient = (EditText) findViewById(R.id.phonesClient);
-        individualDiscountClient = (EditText) findViewById(R.id.individualDiscountClient);
-        btnShow = (Button) findViewById(R.id.showclient);
+        setContentView(R.layout.activity_editorder);
+        editIdOrder = (EditText) findViewById(R.id.editIdOrder);
+        editIdClientOrder = (EditText) findViewById(R.id.editIdClientOrder);
+        editMoneyOrder = (EditText) findViewById(R.id.editMoneyOrder);
+        editStartdateOrder = (EditText) findViewById(R.id.editStartdateOrder);
+        editTimeOrder = (EditText) findViewById(R.id.editTimeOrder);
+        editStatusOrder = (EditText) findViewById(R.id.editStatusOrder);
+        editIdInstrumentsOrder = (EditText) findViewById(R.id.editIdInstrumentsOrder);
+        btnShow = (Button) findViewById(R.id.showOrder);
         btnShow.setOnClickListener(this);
-        btnSave = (Button) findViewById(R.id.saveclient);
+        btnSave = (Button) findViewById(R.id.saveOrder);
         btnSave.setOnClickListener(this);
         //Подключение к БД
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        //Выполняем запрос на выборку данных из Таблицы: "Clients"
+        //Выполняем запрос на выборку данных из Таблицы: "Orders"
         //Получаем интерфейс для чтения и записи значений результата запроса в БД
-        Cursor cursor = db.rawQuery("SELECT * FROM Clients", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM Orders", null);
         cursor.moveToLast();
-        //Количество строк в Таблице: "Clients"
-        countClients = cursor.getInt(0);
-        //Устанавливаем в поле для ввода id - номер последнего инструмента
-        idClient.setText(String.valueOf(countClients));
+        //Количество строк в Таблице: "Orders"
+        countOrders= cursor.getInt(0);
+        //Устанавливаем в поле для ввода id - номер последнего заказа
+        editIdOrder.setText(String.valueOf(countOrders));
     }
 
     @Override
     public void onClick(View v) {
         //Используется для обновления параметров клиента
         ContentValues cv = new ContentValues();
-        Toast messageInt = Toast.makeText(getApplicationContext(), "Данные id клиента, индивидуальная скидка должны быть числовыми", Toast.LENGTH_LONG);
-        Toast messageNull = Toast.makeText(getApplicationContext(), "Пустые поля ввода данных", Toast.LENGTH_LONG);
+        Toast messageInt = Toast.makeText(getApplicationContext(), "Данные id заказа, стоимость заказа, id клиента, статус заказа должны быть числовыми", Toast.LENGTH_LONG);
+        Toast messageIdNull = Toast.makeText(getApplicationContext(), "Пустое поле - id заказа", Toast.LENGTH_LONG);
+        Toast messageMoneyNull = Toast.makeText(getApplicationContext(), "Пустое поле - стоимость заказа", Toast.LENGTH_LONG);
+        Toast messageStartdateNull = Toast.makeText(getApplicationContext(), "Пустое поле - дата заказа", Toast.LENGTH_LONG);
+        Toast messageTimeNull = Toast.makeText(getApplicationContext(), "Пустое поле - время аренды", Toast.LENGTH_LONG);
+        Toast messageIdClientNull = Toast.makeText(getApplicationContext(), "Пустое поле - id клиента", Toast.LENGTH_LONG);
+        Toast messageIdInstrumentsNull = Toast.makeText(getApplicationContext(), "Пустое поле - id инструментов", Toast.LENGTH_LONG);
+        Toast messageStatusNull = Toast.makeText(getApplicationContext(), "Пустое поле - статус заказа", Toast.LENGTH_LONG);
         Toast messageSQL = Toast.makeText(getApplicationContext(), "Не верный запрос к базе данных", Toast.LENGTH_LONG);
         //Получаем данные из полей ввода
-        String id = idClient.getText().toString();
-        String name = nameClient.getText().toString();
-        String phones = phonesClient.getText().toString();
-        String individualDiscount = individualDiscountClient.getText().toString();
+        String id = editIdOrder.getText().toString();
+        String money = editMoneyOrder.getText().toString();
+        String startdate = editStartdateOrder.getText().toString();
+        String time = editTimeOrder.getText().toString();
+        String idClient = editIdClientOrder.getText().toString();
+        String idInstruments = editIdInstrumentsOrder.getText().toString();
+        String status = editStatusOrder.getText().toString();
         //Подключаемся к БД
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         switch (v.getId()) {
-            case R.id.showclient:
-                //Отправляем запрос в БД для Таблицы: "Clients"
-                Cursor cursor = db.rawQuery("SELECT * FROM Clients WHERE "+"id = " + id, null);
+            case R.id.showOrder:
+                //Отправляем запрос в БД для Таблицы: "Orders"
+                Cursor cursor = db.rawQuery("SELECT * FROM Orders WHERE "+"id = " + id, null);
                 cursor.moveToFirst();
                 //Цикл по результату запроса в БД
                 while (!cursor.isAfterLast()) {
-                    nameClient.setText(cursor.getString(1));
-                    phonesClient.setText(cursor.getString(2));
-                    individualDiscountClient.setText(cursor.getString(3));
+                    editMoneyOrder.setText(cursor.getString(1));
+                    editStartdateOrder.setText(cursor.getString(2));
+                    editTimeOrder.setText(cursor.getString(3));
+                    editIdClientOrder.setText(cursor.getString(4));
+                    editIdInstrumentsOrder.setText(cursor.getString(5));
+                    editStatusOrder.setText(cursor.getString(6));
                     cursor.moveToNext();
                 }
                 cursor.close();
                 break;
-            case R.id.saveclient:
+            case R.id.saveOrder:
                 //Обработка не числовых значений ввода
                 try{
-                    int id1 = Integer.parseInt(idClient.getText().toString());
-                    int individualDiscount1 = Integer.parseInt(individualDiscountClient.getText().toString());
+                    int id1 = Integer.parseInt(editIdOrder.getText().toString());
+                    int idClient1 = Integer.parseInt(editIdClientOrder.getText().toString());
+                    int money1 = Integer.parseInt(editMoneyOrder.getText().toString());
+                    int status1 = Integer.parseInt(editStatusOrder.getText().toString());
                 }catch (Exception e){
                     messageInt.show();
                     messageInt.setGravity(Gravity.CENTER, 0, 0);
@@ -101,34 +117,113 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                     btnShow.setClickable(false);
                     break;
                 }
-
-                cv.put("id", idClient.getText().toString());
-                cv.put("name", nameClient.getText().toString());
-                cv.put("phones", phonesClient.getText().toString());
-                cv.put("individualDiscount", individualDiscountClient.getText().toString());
-                System.out.println(idClient.getText().toString());
-                System.out.println(nameClient.getText().toString());
-                System.out.println(phonesClient.getText().toString());
-                System.out.println(individualDiscountClient.getText().toString());
+                cv.put("id", id);
+                cv.put("money", money);
+                cv.put("startdate", startdate);
+                cv.put("time", time);
+                cv.put("idClient", idClient);
+                cv.put("idInstruments", idInstruments);
+                cv.put("status", status);
                 //Обработка пустого ввода
-                if (!(id.equals("") && name.equals("")
-                        && phones.equals("") && individualDiscount.equals(""))) {
-                    messageNull.show();
-                    messageNull.setGravity(Gravity.CENTER, 0, 0);
-                    ((TextView)((LinearLayout)messageNull.getView()).getChildAt(0))
+                //Обработка пустого ввода
+                if (id.equals("")) {
+                    messageIdNull.show();
+                    messageIdNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageIdNull.getView()).getChildAt(0))
                             .setGravity(Gravity.CENTER_HORIZONTAL);
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            messageNull.cancel();
+                            messageIdNull.cancel();
                         }
                     }, 2000);
-                }else{
+                    break;
+                }
+                if (money.equals("")) {
+                    messageMoneyNull.show();
+                    messageMoneyNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageMoneyNull.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageMoneyNull.cancel();
+                        }
+                    }, 2000);
+                    break;
+                }
+                if (startdate.equals("")) {
+                    messageStartdateNull.show();
+                    messageStartdateNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageStartdateNull.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageStartdateNull.cancel();
+                        }
+                    }, 2000);
+                    break;
+                }
+                if (time.equals("")) {
+                    messageTimeNull.show();
+                    messageTimeNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageTimeNull.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageTimeNull.cancel();
+                        }
+                    }, 2000);
+                    break;
+                }
+                if (idClient.equals("")) {
+                    messageIdClientNull.show();
+                    messageIdClientNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageIdClientNull.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageIdClientNull.cancel();
+                        }
+                    }, 2000);
+                    break;
+                }
+                if (idInstruments.equals("")) {
+                    messageIdInstrumentsNull.show();
+                    messageIdInstrumentsNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageIdInstrumentsNull.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageIdInstrumentsNull.cancel();
+                        }
+                    }, 2000);
+                    break;
+                }
+                if (status.equals("")) {
+                    messageStatusNull.show();
+                    messageStatusNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageStatusNull.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageStatusNull.cancel();
+                        }
+                    }, 2000);
+                    break;
+                }
                 try{
-                    //Изменяем параметры инструмента в Таблице: "Clients"
-                    int updateCount = (int) db.update("Clients", cv, "id = " + id, null);
+                    //Изменяем параметры инструмента в Таблице: "Orders"
+                    int updateCount = (int) db.update("Orders", cv, "id = " + id, null);
                     System.out.println(updateCount);
-                    //В случае удачного обновления параметров клиента возвращаемся на родительскую активность
+                    //Обнавляем статусы аренды для инструментов
+                    db.execSQL("UPDATE Instruments SET rentStatus = 0 WHERE id IN (" + idInstruments + ")");
+                    //В случае удачного обновления параметров запроса возвращаемся на родительскую активность
                     if (updateCount == 1) {onBackPressed();}
                     if (updateCount == 0) {
                         messageSQL.show();
@@ -156,7 +251,6 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                         }
                     }, 2000);
                 }
-            }
         }
         //Закрываем подключение к БД
         dbHelper.close();

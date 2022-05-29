@@ -66,6 +66,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
     public void onClick(View v) {
         //Используется для добавления новых строк в Таблицу: "Orders"
         ContentValues cv = new ContentValues();
+        Toast messageStatusInstruments = Toast.makeText(getApplicationContext(), "Данные инструменты в аренде", Toast.LENGTH_LONG);
         Toast messageInt = Toast.makeText(getApplicationContext(), "Данные id заказа, стоимость заказа, id клиента, статус заказа должны быть числовыми", Toast.LENGTH_LONG);
         Toast messageIdNull = Toast.makeText(getApplicationContext(), "Пустое поле - id заказа", Toast.LENGTH_LONG);
         Toast messageMoneyNull = Toast.makeText(getApplicationContext(), "Пустое поле - стоимость заказа", Toast.LENGTH_LONG);
@@ -74,7 +75,6 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
         Toast messageIdClientNull = Toast.makeText(getApplicationContext(), "Пустое поле - id клиента", Toast.LENGTH_LONG);
         Toast messageIdInstrumentsNull = Toast.makeText(getApplicationContext(), "Пустое поле - id инструментов", Toast.LENGTH_LONG);
         Toast messageStatusNull = Toast.makeText(getApplicationContext(), "Пустое поле - статус заказа", Toast.LENGTH_LONG);
-
         Toast messageSQL = Toast.makeText(getApplicationContext(), "Не верный запрос к базе данных", Toast.LENGTH_LONG);
         //Получаем данные из полей ввода
         String id = addIdOrder.getText().toString();
@@ -228,21 +228,38 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                 //расчет заказа
             case R.id.calculateOrder:
                 try {
-                    int calculateMoney = 0;
-                    //Получаем скидку для id клиента
-                    Cursor cursor1 = db.rawQuery("SELECT individualDiscount FROM Clients WHERE id = " + idClient, null);
-                    cursor1.moveToFirst();
-                    //Стоимсоть инструментов в заказе
-                    @SuppressLint("Range") int individualDiscount = Integer.parseInt(cursor1.getString(cursor1.getColumnIndex("individualDiscount")));
-                    Cursor cursor2 = db.rawQuery("SELECT SUM(rentalFees) AS sum FROM Instruments WHERE id IN (" + idInstruments + ")", null);
-                    cursor2.moveToFirst();
-                    @SuppressLint("Range") int moneyInstruments = Integer.parseInt(cursor2.getString(cursor2.getColumnIndex("sum")));
-                    //Время заказа
-                    int t = Integer.parseInt(time);
-                    calculateMoney = moneyInstruments * t - ((moneyInstruments * t) / 100) * individualDiscount;
-                    addMoneyOrder.setText(String.valueOf(calculateMoney));
-                    //изменяем статусы выбранных инструментов
-                    db.execSQL("UPDATE Instruments SET rentStatus = 1 WHERE id IN (" + idInstruments + ")");
+                    Cursor cursorInstruments = db.rawQuery("SELECT SUM(rentStatus) AS sum FROM Instruments WHERE id IN (" + idInstruments + ")", null);
+                    cursorInstruments.moveToFirst();
+                    @SuppressLint("Range") int sumStatus = Integer.parseInt(cursorInstruments.getString(cursorInstruments.getColumnIndex("sum")));
+                    if(sumStatus == 0) {
+                        int calculateMoney = 0;
+                        //Получаем скидку для id клиента
+                        Cursor cursor1 = db.rawQuery("SELECT individualDiscount FROM Clients WHERE id = " + idClient, null);
+                        cursor1.moveToFirst();
+                        //Стоимсоть инструментов в заказе
+                        @SuppressLint("Range") int individualDiscount = Integer.parseInt(cursor1.getString(cursor1.getColumnIndex("individualDiscount")));
+                        Cursor cursor2 = db.rawQuery("SELECT SUM(rentalFees) AS sum FROM Instruments WHERE id IN (" + idInstruments + ")", null);
+                        cursor2.moveToFirst();
+                        @SuppressLint("Range") int moneyInstruments = Integer.parseInt(cursor2.getString(cursor2.getColumnIndex("sum")));
+                        //Время заказа
+                        int t = Integer.parseInt(time);
+                        calculateMoney = moneyInstruments * t - ((moneyInstruments * t) / 100) * individualDiscount;
+                        addMoneyOrder.setText(String.valueOf(calculateMoney));
+                        //изменяем статусы выбранных инструментов
+                        db.execSQL("UPDATE Instruments SET rentStatus = 1 WHERE id IN (" + idInstruments + ")");
+                    }else{
+                        messageStatusInstruments.show();
+                        messageStatusInstruments.setGravity(Gravity.CENTER, 0, 0);
+                        ((TextView)((LinearLayout)messageStatusInstruments.getView()).getChildAt(0))
+                                .setGravity(Gravity.CENTER_HORIZONTAL);
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                messageStatusInstruments.cancel();
+                            }
+                        }, 2000);
+                    break;
+                    }
                 }catch (Exception e){
                     messageSQL.show();
                     messageSQL.setGravity(Gravity.CENTER, 0, 0);
