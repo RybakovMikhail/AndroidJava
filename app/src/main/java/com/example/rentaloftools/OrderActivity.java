@@ -18,14 +18,16 @@ import java.util.HashMap;
  * Программный класс для работы с Таблицей "Orders"
  */
 public class OrderActivity extends MainActivity implements View.OnClickListener {
-    //Кнопки для работы с Таблицей "Orders" в БД
+    //Кнопки для работы с Таблицей "Orders"
     Button btnAdd, btnEdit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
+        //Установка заголовка
         setTitle("Заказы");
+        //Вкладки
         TabHost tabHost = (TabHost) findViewById(R.id.tabHostOrder);
         tabHost.setup();
         //Формирование вкладки с таблицей данных
@@ -41,31 +43,29 @@ public class OrderActivity extends MainActivity implements View.OnClickListener 
         //Установка текущей вкладки
         tabHost.setCurrentTab(0);
         //Обработка выбора вкладки таблицы
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
-            @Override
-            public void onTabChanged(String tabId) {
-                //Если выбрана вкладка "Таблица"
-                if("tag1".equals(tabId)) {
-                    //Чтение данных из Таблицы: "Orders" для БД
-                    initTableInstrument(dbHelper);
-                }
-            }});
-        ContentValues cv = new ContentValues();
+        tabHost.setOnTabChangedListener(tabId -> {
+            //Если выбрана вкладка "Таблица"
+            if("tag1".equals(tabId)) {
+                //Чтение данных из Таблицы: "Orders"
+                initTableOrders(dbHelper);
+            }
+        });
         //Обработка кнопок
         btnAdd = (Button) findViewById(R.id.addorder);
         btnAdd.setOnClickListener(this);
         btnEdit = (Button) findViewById(R.id.editorder);
         btnEdit.setOnClickListener(this);
-        //Чтение данных из Таблицы: "Orders" для БД
-        initTableInstrument(dbHelper);
+        //Чтение данных из Таблицы: "Orders"
+        initTableOrders(dbHelper);
     }
 
     /**
-     * Чтение данных из Таблицы: "Orders" для БД
+     * Функция чтения данных из Таблицы: "Orders"
      * @param dbHelper
      */
     @SuppressLint("Range")
-    public void initTableInstrument(DBHelper dbHelper){
+    public void initTableOrders(DBHelper dbHelper){
+        //Подключение к БД
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         //Список заказов
         ArrayList<HashMap<String, Object>> orders = new ArrayList<HashMap<String, Object>>();

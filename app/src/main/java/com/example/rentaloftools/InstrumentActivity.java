@@ -17,14 +17,16 @@ import java.util.HashMap;
  * Программный класс для работы с Таблицей "Instruments"
  */
 public class InstrumentActivity extends MainActivity implements View.OnClickListener {
-    //Кнопки для работы с Таблицей "Instruments" в БД
+    //Кнопки для работы с Таблицей "Instruments"
     Button btnAdd, btnEdit, btnDel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instrument);
+        //Установка заголовка
         setTitle("Инструменты");
+        //Вкладки
         TabHost tabHost = (TabHost) findViewById(R.id.tabHostInstrument);
         tabHost.setup();
         //Формирование вкладки с таблицей данных
@@ -40,16 +42,13 @@ public class InstrumentActivity extends MainActivity implements View.OnClickList
         //Установка текущей вкладки
         tabHost.setCurrentTab(0);
         //Обработка выбора вкладки таблицы
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
-            @Override
-            public void onTabChanged(String tabId) {
-                //Если выбрана вкладка "Таблица"
-                if("tag1".equals(tabId)) {
-                    //Чтение данных из Таблицы: "Instruments" для БД
-                    initTableInstrument(dbHelper);
-                }
-            }});
-        ContentValues cv = new ContentValues();
+        tabHost.setOnTabChangedListener(tabId -> {
+            //Если выбрана вкладка "Таблица"
+            if("tag1".equals(tabId)) {
+                //Чтение данных из Таблицы: "Instruments"
+                initTableInstrument(dbHelper);
+            }
+        });
         //Обработка кнопок
         btnAdd = (Button) findViewById(R.id.addinstruments);
         btnAdd.setOnClickListener(this);
@@ -57,15 +56,16 @@ public class InstrumentActivity extends MainActivity implements View.OnClickList
         btnEdit.setOnClickListener(this);
         btnDel = (Button) findViewById(R.id.delinstruments);
         btnDel.setOnClickListener(this);
-        //Чтение данных из Таблицы: "Instruments" для БД
+        //Чтение данных из Таблицы: "Instruments"
         initTableInstrument(dbHelper);
     }
 
     /**
-     * Чтение данных из Таблицы: "Instruments" для БД
+     * Функция чтения данных из Таблицы: "Instruments"
      * @param dbHelper
      */
     public void initTableInstrument(DBHelper dbHelper){
+        //Подключение к БД
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         //Список инструментов
         ArrayList<HashMap<String, Object>> instruments = new ArrayList<HashMap<String, Object>>();
@@ -89,7 +89,7 @@ public class InstrumentActivity extends MainActivity implements View.OnClickList
         }
         cursor.close();
         //Параметры инструмента, которые будем отображать в соответствующих
-        //элементах из разметки adapter.xml
+        //элементах из разметки adapter_instrument.xml
         String[] from = {"id", "name", "rentalFees", "rentStatus"};
         int[] to = {R.id.textId, R.id.textName, R.id.textRentalFees, R.id.textRentStatus};
         //Создаем адаптер для работы с ListView

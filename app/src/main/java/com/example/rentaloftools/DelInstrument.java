@@ -13,8 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /*
-Программный класс - наследник главной активности,
-для удаления инструмента из Таблицы: "Instruments" в БД
+Программный класс для удаления инструмента из Таблицы: "Instruments"
  */
 public class DelInstrument extends MainActivity implements View.OnClickListener {
     //Поле для ввода id инструмента, который необходимо удалить
@@ -54,17 +53,16 @@ public class DelInstrument extends MainActivity implements View.OnClickListener 
                         @Override
                         public void run() {
                             messageNull.cancel();
-                            //onBackPressed();
                         }
-                    }, 2000);// 5 sec
+                    }, 2000);
                 }
 
                 try{
-                    //Удаление из Таблицы: "Instruments" по введенному id
+                    //Удаление из Таблицы: "Instruments" по введенному id инструмента
                     int delCount = db.delete("Instruments", "id = " + delId.getText().toString(), null);
                     //В случае удачного удаления возвращаемся на родительскую активность
                     if (delCount == 1) {onBackPressed();}
-                    //В случае если id не существует в таблице
+                    //В случае если id не существует в таблице "Instruments"  - сообщение об ошибке
                     if (delCount == 0) {
                         message.show();
                         message.setGravity(Gravity.CENTER, 0, 0);
@@ -74,13 +72,11 @@ public class DelInstrument extends MainActivity implements View.OnClickListener 
                             @Override
                             public void run() {
                                 message.cancel();
-                                //onBackPressed();
                             }
-                        }, 2000);// 5 sec
+                        }, 2000);
                         }
                 }
-                //В случае если произошла ошибка при удалении
-                //Например: пользователь ввел ошибочные данные (вместо числа - ввел текст)
+                //Обработка в случае, если произошла ошибка в запросе SQL при удалении инструмента
                 catch(android.database.sqlite.SQLiteException e){
                     messageSQL.show();
                     messageSQL.setGravity(Gravity.CENTER, 0, 0);
@@ -90,9 +86,8 @@ public class DelInstrument extends MainActivity implements View.OnClickListener 
                         @Override
                         public void run() {
                             messageSQL.cancel();
-                            //onBackPressed();
                         }
-                    }, 2000);// 5 sec
+                    }, 2000);
                 }
                 break;
         }

@@ -17,14 +17,16 @@ import java.util.HashMap;
  * Программный класс для работы с Таблицей "Clients"
  */
 public class ClientActivity extends MainActivity implements View.OnClickListener {
-    //Кнопки для работы с Таблицей "Clients" в БД
+    //Кнопки для работы с Таблицей "Clients"
     Button btnAdd, btnEdit, btnDel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client);
+        //Установка заголовка окна
         setTitle("Клиенты");
+        //Вкладки
         TabHost tabHost = (TabHost) findViewById(R.id.tabHostClient);
         tabHost.setup();
         //Формирование вкладки с таблицей данных
@@ -40,16 +42,13 @@ public class ClientActivity extends MainActivity implements View.OnClickListener
         //Установка текущей вкладки
         tabHost.setCurrentTab(0);
         //Обработка выбора вкладки таблицы
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener(){
-            @Override
-            public void onTabChanged(String tabId) {
-                //Если выбрана вкладка "Таблица"
-                if("tag1".equals(tabId)) {
-                    //Чтение данных из Таблицы: "Clients" для БД
-                    initTableClient(dbHelper);
-                }
-            }});
-        ContentValues cv = new ContentValues();
+        tabHost.setOnTabChangedListener(tabId -> {
+            //Если выбрана вкладка "Таблица"
+            if("tag1".equals(tabId)) {
+                //Чтение данных из Таблицы: "Clients"
+                initTableClient(dbHelper);
+            }
+        });
         //Обработка кнопок
         btnAdd = (Button) findViewById(R.id.addclient);
         btnAdd.setOnClickListener(this);
@@ -57,15 +56,16 @@ public class ClientActivity extends MainActivity implements View.OnClickListener
         btnEdit.setOnClickListener(this);
         btnDel = (Button) findViewById(R.id.delclient);
         btnDel.setOnClickListener(this);
-        //Чтение данных из Таблицы: "Clients" для БД
+        //Чтение данных из Таблицы: "Clients"
         initTableClient(dbHelper);
     }
 
     /**
-     * Чтение данных из Таблицы: "Clients" для БД
+     * Функция чтения данных из Таблицы: "Clients"
      * @param dbHelper
      */
     public void initTableClient(DBHelper dbHelper){
+        //Подключение к БД
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         //Список клиентов
         ArrayList<HashMap<String, Object>> clients = new ArrayList<HashMap<String, Object>>();

@@ -12,8 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /*
-Программный класс - наследник главной активности,
-для удаления клиента из Таблицы: "Clients"
+Программный класс для удаления клиента из Таблицы: "Clients"
  */
 public class DelClient extends MainActivity implements View.OnClickListener {
     //Поле для ввода id клиента, который необходимо удалить
@@ -56,11 +55,11 @@ public class DelClient extends MainActivity implements View.OnClickListener {
                     }, 2000);
                 }
                 try{
-                    //Удаление из Таблицы: "Clients" по введенному id
+                    //Удаление из Таблицы: "Clients" по введенному id клиента
                     int delCount = db.delete("Clients", "id = " + delId.getText().toString(), null);
                     //В случае удачного удаления возвращаемся на родительскую активность
                     if (delCount == 1) {onBackPressed();}
-                    //В случае если id не существует в таблице
+                    //В случае если id не существует в таблице "Clients" - сообщение об ошибке
                     if (delCount == 0) {
                         message.show();
                         message.setGravity(Gravity.CENTER, 0, 0);
@@ -74,7 +73,7 @@ public class DelClient extends MainActivity implements View.OnClickListener {
                         }, 2000);
                         }
                 }
-                //В случае если произошла ошибка при удалении
+                //Обработка в случае, если произошла ошибка в запросе SQL при удалении клиента
                 catch(android.database.sqlite.SQLiteException e){
                     messageSQL.show();
                     messageSQL.setGravity(Gravity.CENTER, 0, 0);

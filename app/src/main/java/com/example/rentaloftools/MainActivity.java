@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+//Программный класс главного окна приложения "RentalOfTools"
 public class MainActivity extends Activity implements OnClickListener {
     //Кнопки управления объектами
     Button btnClients, btnInstruments, btnOrders;
@@ -19,6 +20,7 @@ public class MainActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_main);
         //Создание объекта для БД
         dbHelper = new DBHelper(this);
+        //Установка заголовка
         setTitle("Прокат инструментов");
         //Обработка кнопок
         btnClients = (Button) findViewById(R.id.clients);
