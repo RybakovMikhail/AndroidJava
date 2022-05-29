@@ -51,36 +51,6 @@
         android:gravity="center"
         android:textSize="5sp"/>
 
-     <TextView
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:text="Стоимость заказа"
-         android:gravity="center"
-         android:textSize="20sp"
-         android:textStyle="bold"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:gravity="center"
-        android:textSize="5sp"/>
-
-    <EditText
-        android:id="@+id/addMoneyOrder"
-        android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:background="@drawable/stedit"
-        android:gravity="center"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:gravity="center"
-        android:textSize="5sp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -148,6 +118,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        android:textSize="5sp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="id клиента"
         android:gravity="center"
         android:textSize="20sp"
@@ -179,7 +156,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="id инструментов"
+        android:text="id инструментов (,)"
         android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold"/>
@@ -193,6 +170,53 @@
 
     <EditText
         android:id="@+id/addIdInstrumentsOrder"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@drawable/stedit"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        android:textSize="5sp"/>
+
+    <Button
+        android:id="@+id/calculateOrder"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:background = "@drawable/roundedbutton"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="Расчет заказа"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        android:textSize="5sp"/>
+
+    <TextView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Стоимость заказа"
+         android:gravity="center"
+         android:textSize="20sp"
+         android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        android:textSize="5sp"/>
+
+    <EditText
+        android:id="@+id/addMoneyOrder"
         android:layout_width="150dp"
         android:layout_height="40dp"
         android:background="@drawable/stedit"

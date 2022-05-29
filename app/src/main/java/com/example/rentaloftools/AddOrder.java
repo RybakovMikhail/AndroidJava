@@ -1,5 +1,6 @@
 package com.example.rentaloftools;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -24,6 +25,8 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
             addTimeOrder, addStatusOrder, addIdInstrumentsOrder;
     //Кнопка сохранения клиента в Таблицу: "Orders"
     Button btnSave;
+    //Кнопка расчета заказа
+    Button btnCalculate;
     //Объект для работы с очередью сообщений
     final Handler handler = new Handler();
     //Количество строк в Таблице: "Orders"
@@ -41,6 +44,8 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
         addStatusOrder = (EditText) findViewById(R.id.addStatusOrder);
         btnSave = (Button) findViewById(R.id.saveorder);
         btnSave.setOnClickListener(this);
+        btnCalculate= (Button) findViewById(R.id.calculateOrder);
+        btnCalculate.setOnClickListener(this);
         //Подключение к БД
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         //Выполняем запрос на выборку данных из Таблицы: "Orders"
@@ -219,6 +224,38 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                         }
                     }, 2000);
                 }
+                break;
+                //расчет заказа
+            case R.id.calculateOrder:
+                try {
+                    int calculateMoney = 0;
+                    //Получаем скидку для id клиента
+                    Cursor cursor1 = db.rawQuery("SELECT individualDiscount FROM Clients WHERE id = " + idClient, null);
+                    cursor1.moveToFirst();
+                    //Стоимсоть инструментов в заказе
+                    @SuppressLint("Range") int individualDiscount = Integer.parseInt(cursor1.getString(cursor1.getColumnIndex("individualDiscount")));
+                    Cursor cursor2 = db.rawQuery("SELECT SUM(rentalFees) AS sum FROM Instruments WHERE id IN (" + idInstruments + ")", null);
+                    cursor2.moveToFirst();
+                    @SuppressLint("Range") int moneyInstruments = Integer.parseInt(cursor2.getString(cursor2.getColumnIndex("sum")));
+                    //Время заказа
+                    int t = Integer.parseInt(time);
+                    calculateMoney = moneyInstruments * t - ((moneyInstruments * t) / 100) * individualDiscount;
+                    addMoneyOrder.setText(String.valueOf(calculateMoney));
+                    //изменяем статусы выбранных инструментов
+                    db.execSQL("UPDATE Instruments SET rentStatus = 1 WHERE id IN (" + idInstruments + ")");
+                }catch (Exception e){
+                    messageSQL.show();
+                    messageSQL.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageSQL.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageSQL.cancel();
+                        }
+                    }, 2000);
+                }
+                break;
         }
         //Закрываем подключение к БД
         dbHelper.close();
