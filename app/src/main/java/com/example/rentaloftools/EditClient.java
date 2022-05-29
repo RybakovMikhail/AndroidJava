@@ -56,7 +56,10 @@ public class EditClient extends MainActivity implements View.OnClickListener {
         //Используется для обновления параметров клиента
         ContentValues cv = new ContentValues();
         Toast messageInt = Toast.makeText(getApplicationContext(), "Данные id клиента, индивидуальная скидка должны быть числовыми", Toast.LENGTH_LONG);
-        Toast messageNull = Toast.makeText(getApplicationContext(), "Пустые поля ввода данных", Toast.LENGTH_LONG);
+        Toast messageIdNull = Toast.makeText(getApplicationContext(), "Пустое поле - id клиента", Toast.LENGTH_LONG);
+        Toast messageNameNull = Toast.makeText(getApplicationContext(), "Пустое поле - ФИО клиента", Toast.LENGTH_LONG);
+        Toast messagePhonesNull = Toast.makeText(getApplicationContext(), "Пустое поле - Телефон клиента", Toast.LENGTH_LONG);
+        Toast messageIndividualDiscountNull = Toast.makeText(getApplicationContext(), "Пустое поле - Индивидуальная скидка", Toast.LENGTH_LONG);
         Toast messageSQL = Toast.makeText(getApplicationContext(), "Не верный запрос к базе данных", Toast.LENGTH_LONG);
         //Получаем данные из полей ввода
         String id = idClient.getText().toString();
@@ -103,20 +106,62 @@ public class EditClient extends MainActivity implements View.OnClickListener {
                 cv.put("name", nameClient.getText().toString());
                 cv.put("phones", phonesClient.getText().toString());
                 cv.put("individualDiscount", individualDiscountClient.getText().toString());
-                //Обработка пустого ввода
-                if (!(id.equals("") && name.equals("")
-                        && phones.equals("") && individualDiscount.equals(""))) {
-                    messageNull.show();
-                    messageNull.setGravity(Gravity.CENTER, 0, 0);
-                    ((TextView)((LinearLayout)messageNull.getView()).getChildAt(0))
+                //Обработка пустого ввода id клиента
+                if (id.equals("")) {
+                    messageIdNull.show();
+                    messageIdNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageIdNull.getView()).getChildAt(0))
                             .setGravity(Gravity.CENTER_HORIZONTAL);
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            messageNull.cancel();
+                            messageIdNull.cancel();
                         }
                     }, 2000);
-                }else{
+                    break;
+                }
+                //Обработка пустого ввода ФИО клиента
+                if (name.equals("")) {
+                    messageNameNull.show();
+                    messageNameNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageNameNull.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageNameNull.cancel();
+                        }
+                    }, 2000);
+                    break;
+                }
+                //Обработка пустого ввода Телефона клиента
+                if (phones.equals("")) {
+                    messagePhonesNull.show();
+                    messagePhonesNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messagePhonesNull.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messagePhonesNull.cancel();
+                        }
+                    }, 2000);
+                    break;
+                }
+                //Обработка пустого ввода индивидуальной скидки клиента
+                if (individualDiscount.equals("")) {
+                    messageIndividualDiscountNull.show();
+                    messageIndividualDiscountNull.setGravity(Gravity.CENTER, 0, 0);
+                    ((TextView)((LinearLayout)messageIndividualDiscountNull.getView()).getChildAt(0))
+                            .setGravity(Gravity.CENTER_HORIZONTAL);
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            messageIndividualDiscountNull.cancel();
+                        }
+                    }, 2000);
+                    break;
+                }
                 try{
                     //Изменяем параметры инструмента в Таблице: "Clients"
                     int updateCount = (int) db.update("Clients", cv, "id = " + id, null);
@@ -149,7 +194,6 @@ public class EditClient extends MainActivity implements View.OnClickListener {
                         }
                     }, 2000);
                 }
-            }
         }
         //Закрываем подключение к БД
         dbHelper.close();
