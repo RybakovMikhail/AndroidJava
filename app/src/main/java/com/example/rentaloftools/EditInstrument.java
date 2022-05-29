@@ -14,8 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /*
-Программный класс - наследник главной активности,
-для изменения параметров инструмента в Таблице: "Instruments" для БД
+Программный класс для изменения параметров инструмента в Таблице: "Instruments"
  */
 public class EditInstrument extends MainActivity implements View.OnClickListener {
     //Метки полей для ввода данных
@@ -48,7 +47,7 @@ public class EditInstrument extends MainActivity implements View.OnClickListener
         //Получаем интерфейс для чтения и записи значений результата запроса в БД
         Cursor cursor = db.rawQuery("SELECT * FROM Instruments", null);
         cursor.moveToLast();
-        //Количество строк в Таблице: "Instruments"
+        //Получаем количество строк из Таблицы: "Instruments"
         countInstruments = cursor.getInt(0);
         //Устанавливаем в поле для ввода id - номер последнего инструмента
         etId.setText(String.valueOf(countInstruments));
@@ -84,7 +83,7 @@ public class EditInstrument extends MainActivity implements View.OnClickListener
                 cursor.close();
                 break;
             case R.id.saveinstrument:
-                //Обработка не числовых значений ввода
+                //Обработка ошибок возникающих в случае ввода текстовых данных в числовые поля
                 try{
                     int id1 = Integer.parseInt(etId.getText().toString());
                     int rentalFees1 = Integer.parseInt(etRentalFees.getText().toString());
@@ -103,12 +102,11 @@ public class EditInstrument extends MainActivity implements View.OnClickListener
                     btnShow.setClickable(false);
                     break;
                 }
-
+                //Добавляем данные в контекст
                 cv.put("id", etId.getText().toString());
                 cv.put("name", etName.getText().toString());
                 cv.put("rentalFees", etRentalFees.getText().toString());
                 cv.put("rentStatus", etRentStatus.getText().toString());
-
                 //Обработка пустого ввода
                 if ((id.equals("") && name.equals("")
                         && rentalFees.equals("") && rentStatus.equals("")) || (name.equals("")

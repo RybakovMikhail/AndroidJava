@@ -14,8 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /*
-Программный класс - наследник главной активности,
-для добавления клиента в Таблицу: "Clients"
+Программный класс для добавления клиента в Таблицу: "Clients"
  */
 public class AddClient extends MainActivity implements View.OnClickListener {
     //Поля для ввода данных
@@ -42,7 +41,7 @@ public class AddClient extends MainActivity implements View.OnClickListener {
         //Получаем интерфейс для чтения и записи значений результата запроса в БД
         Cursor cursor = db.rawQuery("SELECT * FROM Clients", null);
         cursor.moveToLast();
-        //Количество строк в Таблице: "Clients"
+        //Получаем количество строк из Таблицы: "Clients"
         countClients = cursor.getInt(0);
         //Устанавливаем в поле для ввода id последнего клиента + 1
         addIdClient.setText(String.valueOf(countClients + 1));
@@ -52,6 +51,7 @@ public class AddClient extends MainActivity implements View.OnClickListener {
     public void onClick(View v) {
         //Используется для добавления новых строк в Таблицу: "Clients"
         ContentValues cv = new ContentValues();
+        //Сообщения об ошибках
         Toast messageInt = Toast.makeText(getApplicationContext(), "Данные id клиента, индивидуальная скидка должны быть числовыми", Toast.LENGTH_LONG);
         Toast messageIdNull = Toast.makeText(getApplicationContext(), "Пустое поле - id клиента", Toast.LENGTH_LONG);
         Toast messageNameNull = Toast.makeText(getApplicationContext(), "Пустое поле - ФИО клиента", Toast.LENGTH_LONG);
@@ -67,6 +67,7 @@ public class AddClient extends MainActivity implements View.OnClickListener {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         switch (v.getId()) {
             case R.id.saveclient:
+                //Обработка ошибок возникающих в случае ввода текстовых данных в числовые поля
                 try{
                     int id1 = Integer.parseInt(addIdClient.getText().toString());
                     int individualDiscount1 = Integer.parseInt(addIndividualDiscount.getText().toString());
@@ -83,11 +84,12 @@ public class AddClient extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Добавляем данные в контекст
                 cv.put("id", id);
                 cv.put("name", name);
                 cv.put("phones", phones);
                 cv.put("individualDiscount", individualDiscount);
-                //Обработка пустого ввода
+                //Обработка пустого ввода id клиента
                 if (id.equals("")) {
                     messageIdNull.show();
                     messageIdNull.setGravity(Gravity.CENTER, 0, 0);
@@ -101,6 +103,7 @@ public class AddClient extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода ФИО клиента
                 if (name.equals("")) {
                     messageNameNull.show();
                     messageNameNull.setGravity(Gravity.CENTER, 0, 0);
@@ -114,6 +117,7 @@ public class AddClient extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода Телефона клиента
                 if (phones.equals("")) {
                     messagePhonesNull.show();
                     messagePhonesNull.setGravity(Gravity.CENTER, 0, 0);
@@ -127,6 +131,7 @@ public class AddClient extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода индивидуальной скидки клиента
                 if (individualDiscount.equals("")) {
                     messageIndividualDiscountNull.show();
                     messageIndividualDiscountNull.setGravity(Gravity.CENTER, 0, 0);
@@ -146,7 +151,7 @@ public class AddClient extends MainActivity implements View.OnClickListener {
                     //В случае удачного добавления клиента возвращаемся на родительскую активность
                     if (addCount == (countClients + 1)) {onBackPressed();}
                 }
-                //В случае если произошла ошибка при удалении
+                //В случае если произошла ошибка при добавлении клиента в SQL запросе
                 catch(android.database.sqlite.SQLiteConstraintException e){
                     messageSQL.show();
                     messageSQL.setGravity(Gravity.CENTER, 0, 0);

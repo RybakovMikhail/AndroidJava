@@ -12,7 +12,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 
 /**
- * Класс для работы с БД
+ * Класс для работы с БД "ProcatDB"
  */
 public class DBHelper extends SQLiteOpenHelper {
     //Контекст данных
@@ -31,7 +31,6 @@ public class DBHelper extends SQLiteOpenHelper {
      * @param context
      */
     public DBHelper(Context context) {
-        //вызов конструктора суперкласса
         super(context, DATABASE_NAME, null, 1);
         fContext = context;
     }

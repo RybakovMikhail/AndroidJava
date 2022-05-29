@@ -14,8 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /*
-Программный класс - наследник главной активности,
-для изменения параметров клиента в Таблице: "Clients"
+Программный класс для изменения параметров клиента в Таблице: "Clients"
  */
 public class EditClient extends MainActivity implements View.OnClickListener {
     //Поля для ввода данных
@@ -46,9 +45,9 @@ public class EditClient extends MainActivity implements View.OnClickListener {
         //Получаем интерфейс для чтения и записи значений результата запроса в БД
         Cursor cursor = db.rawQuery("SELECT * FROM Clients", null);
         cursor.moveToLast();
-        //Количество строк в Таблице: "Clients"
+        //Получаем количество строк из Таблицы: "Clients"
         countClients = cursor.getInt(0);
-        //Устанавливаем в поле для ввода id - номер последнего инструмента
+        //Устанавливаем в поле для ввода id - номер последнего клиента
         idClient.setText(String.valueOf(countClients));
     }
 
@@ -81,7 +80,7 @@ public class EditClient extends MainActivity implements View.OnClickListener {
                 cursor.close();
                 break;
             case R.id.saveclient:
-                //Обработка не числовых значений ввода
+                //Обработка ошибок возникающих в случае ввода текстовых данных в числовые поля
                 try{
                     int id1 = Integer.parseInt(idClient.getText().toString());
                     int individualDiscount1 = Integer.parseInt(individualDiscountClient.getText().toString());
@@ -99,6 +98,7 @@ public class EditClient extends MainActivity implements View.OnClickListener {
                     btnShow.setClickable(false);
                     break;
                 }
+                //Добавляем данные в контекст
                 cv.put("id", idClient.getText().toString());
                 cv.put("name", nameClient.getText().toString());
                 cv.put("phones", phonesClient.getText().toString());

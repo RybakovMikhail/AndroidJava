@@ -17,8 +17,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 /*
-Программный класс - наследник главной активности,
-для добавления инструмента в Таблицу: "Instruments" для БД
+Программный класс для добавления инструмента в Таблицу: "Instruments" для БД
  */
 public class AddInstrument extends MainActivity implements View.OnClickListener {
     //Поля для ввода данных
@@ -45,7 +44,7 @@ public class AddInstrument extends MainActivity implements View.OnClickListener 
         //Получаем интерфейс для чтения и записи значений результата запроса в БД
         Cursor cursor = db.rawQuery("SELECT * FROM Instruments", null);
         cursor.moveToLast();
-        //Количество строк в Таблице: "Instruments"
+        //Получаем количество строк из Таблицы: "Instruments"
         countInstruments = cursor.getInt(0);
         //Устанавливаем в поле для ввода id последнего инструмента + 1
         etId.setText(String.valueOf(countInstruments + 1));
@@ -55,6 +54,7 @@ public class AddInstrument extends MainActivity implements View.OnClickListener 
     public void onClick(View v) {
         //Используется для добавления новых строк в Таблицу: "Instruments"
         ContentValues cv = new ContentValues();
+        //Сообщения о ошибках
         Toast messageInt = Toast.makeText(getApplicationContext(), "Данные id инструмента, стоимости в сутки и статус аренды должны быть числовыми", Toast.LENGTH_LONG);
         Toast messageNull = Toast.makeText(getApplicationContext(), "Пустые поля ввода данных", Toast.LENGTH_LONG);
         Toast message = Toast.makeText(getApplicationContext(), "Не верный статус аренды инструмента", Toast.LENGTH_LONG);
@@ -68,6 +68,7 @@ public class AddInstrument extends MainActivity implements View.OnClickListener 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         switch (v.getId()) {
             case R.id.saveinstrument:
+                //Обработка ошибок возникающих в случае ввода текстовых данных в числовые поля
                 try{
                     int id1 = Integer.parseInt(etId.getText().toString());
                     int rentalFees1 = Integer.parseInt(etRentalFees.getText().toString());
@@ -85,12 +86,11 @@ public class AddInstrument extends MainActivity implements View.OnClickListener 
                     }, 2000);// 5 sec
                     break;
                 }
-
+                //Добавляем данные в контекст
                 cv.put("id", id);
                 cv.put("name", name);
                 cv.put("rentalFees", rentalFees);
                 cv.put("rentStatus", rentStatus);
-
                 //Обработка пустого ввода
                 if ((id.equals("") && name.equals("")
                         && rentalFees.equals("") && rentStatus.equals("")) || (name.equals("")
@@ -103,10 +103,10 @@ public class AddInstrument extends MainActivity implements View.OnClickListener 
                         @Override
                         public void run() {
                             messageNull.cancel();
-                            //onBackPressed();
                         }
-                    }, 2000);// 5 sec
+                    }, 2000);
                 }else{
+                    //Обработка ввода статуса аренды инструмента (при создании инструмента он равен 0)
                     if (Integer.valueOf(rentStatus) != 0) {
                         message.show();
                         message.setGravity(Gravity.CENTER, 0, 0);
@@ -116,9 +116,8 @@ public class AddInstrument extends MainActivity implements View.OnClickListener 
                             @Override
                             public void run() {
                                 message.cancel();
-                                //onBackPressed();
                             }
-                        }, 2000);// 5 sec
+                        }, 2000);
                         break;
                     }
                 try{
@@ -127,8 +126,7 @@ public class AddInstrument extends MainActivity implements View.OnClickListener 
                     //В случае удачного добавления инструмента возвращаемся на родительскую активность
                     if (addCount == (countInstruments + 1)) {onBackPressed();}
                 }
-                //В случае если произошла ошибка при удалении
-                //Например: пользователь ввел ошибочные данные (вместо числа - ввел текст)
+                //В случае если произошла ошибка при добавлении инструмента в SQL запросе
                 catch(android.database.sqlite.SQLiteConstraintException e){
                     messageSQL.show();
                     messageSQL.setGravity(Gravity.CENTER, 0, 0);
@@ -139,7 +137,7 @@ public class AddInstrument extends MainActivity implements View.OnClickListener 
                         public void run() {
                             messageSQL.cancel();
                         }
-                    }, 2000);// 5 sec
+                    }, 2000);
                 }
             }
         }

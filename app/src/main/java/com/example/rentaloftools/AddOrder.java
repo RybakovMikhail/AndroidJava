@@ -16,14 +16,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /*
-Программный класс - наследник главной активности,
-для добавления клиента в Таблицу: "Orders"
+Программный класс для добавления заказа в Таблицу: "Orders"
  */
 public class AddOrder extends MainActivity implements View.OnClickListener {
     //Поля для ввода данных
     EditText addIdOrder, addIdClientOrder, addMoneyOrder, addStartdateOrder,
             addTimeOrder, addStatusOrder, addIdInstrumentsOrder;
-    //Кнопка сохранения клиента в Таблицу: "Orders"
+    //Кнопка сохранения заказа в Таблицу: "Orders"
     Button btnSave;
     //Кнопка расчета заказа
     Button btnCalculate;
@@ -52,7 +51,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
         //Получаем интерфейс для чтения и записи значений результата запроса в БД
         Cursor cursor = db.rawQuery("SELECT * FROM Orders", null);
         cursor.moveToLast();
-        //Количество строк в Таблице: "Orders"
+        //Получение количества строк из Таблицы: "Orders"
         if(cursor.getCount() == 0){
             countOrders = 0;
         }else {
@@ -88,6 +87,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         switch (v.getId()) {
             case R.id.saveorder:
+                //Обработка ошибок возникающих в случае ввода текстовых данных в числовые поля
                 try{
                     int id1 = Integer.parseInt(addIdOrder.getText().toString());
                     int idClient1 = Integer.parseInt(addIdClientOrder.getText().toString());
@@ -106,6 +106,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Добавляем данные в контекст
                 cv.put("id", id);
                 cv.put("money", money);
                 cv.put("startdate", startdate);
@@ -113,7 +114,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                 cv.put("idClient", idClient);
                 cv.put("idInstruments", idInstruments);
                 cv.put("status", status);
-                //Обработка пустого ввода
+                //Обработка пустого ввода id заказа
                 if (id.equals("")) {
                     messageIdNull.show();
                     messageIdNull.setGravity(Gravity.CENTER, 0, 0);
@@ -127,6 +128,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода стоимости заказа
                 if (money.equals("")) {
                     messageMoneyNull.show();
                     messageMoneyNull.setGravity(Gravity.CENTER, 0, 0);
@@ -140,6 +142,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода даты заказа
                 if (startdate.equals("")) {
                     messageStartdateNull.show();
                     messageStartdateNull.setGravity(Gravity.CENTER, 0, 0);
@@ -153,6 +156,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода времени аренды
                 if (time.equals("")) {
                     messageTimeNull.show();
                     messageTimeNull.setGravity(Gravity.CENTER, 0, 0);
@@ -166,6 +170,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода id клиента для заказа
                 if (idClient.equals("")) {
                     messageIdClientNull.show();
                     messageIdClientNull.setGravity(Gravity.CENTER, 0, 0);
@@ -179,6 +184,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода id инструментов для заказа
                 if (idInstruments.equals("")) {
                     messageIdInstrumentsNull.show();
                     messageIdInstrumentsNull.setGravity(Gravity.CENTER, 0, 0);
@@ -192,6 +198,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода статуса заказа
                 if (status.equals("")) {
                     messageStatusNull.show();
                     messageStatusNull.setGravity(Gravity.CENTER, 0, 0);
@@ -211,7 +218,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                     //В случае удачного добавления заказа возвращаемся на родительскую активность
                     if (addCount == (countOrders + 1)) {onBackPressed();}
                 }
-                //В случае если произошла ошибка при удалении
+                //В случае если произошла ошибка при добавлении заказа в SQL запросе
                 catch(android.database.sqlite.SQLiteConstraintException e){
                     messageSQL.show();
                     messageSQL.setGravity(Gravity.CENTER, 0, 0);
@@ -228,10 +235,13 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                 //расчет заказа
             case R.id.calculateOrder:
                 try {
+                    //Определяем статусы введенных инструментов (для оформления заказа сумма статусов = 0, т.е. по данным инструментам нет аренды)
                     Cursor cursorInstruments = db.rawQuery("SELECT SUM(rentStatus) AS sum FROM Instruments WHERE id IN (" + idInstruments + ")", null);
                     cursorInstruments.moveToFirst();
                     @SuppressLint("Range") int sumStatus = Integer.parseInt(cursorInstruments.getString(cursorInstruments.getColumnIndex("sum")));
+                    //Если инструменты не в других заказах
                     if(sumStatus == 0) {
+                        //Стоимость заказа
                         int calculateMoney = 0;
                         //Получаем скидку для id клиента
                         Cursor cursor1 = db.rawQuery("SELECT individualDiscount FROM Clients WHERE id = " + idClient, null);
@@ -248,6 +258,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                         //изменяем статусы выбранных инструментов
                         db.execSQL("UPDATE Instruments SET rentStatus = 1 WHERE id IN (" + idInstruments + ")");
                     }else{
+                        //Ошибка: "Данные инструменты в аренде"
                         messageStatusInstruments.show();
                         messageStatusInstruments.setGravity(Gravity.CENTER, 0, 0);
                         ((TextView)((LinearLayout)messageStatusInstruments.getView()).getChildAt(0))
@@ -261,6 +272,7 @@ public class AddOrder extends MainActivity implements View.OnClickListener {
                     break;
                     }
                 }catch (Exception e){
+                    //В случае если произошла ошибка при добавлении заказа в SQL запросе
                     messageSQL.show();
                     messageSQL.setGravity(Gravity.CENTER, 0, 0);
                     ((TextView)((LinearLayout)messageSQL.getView()).getChildAt(0))

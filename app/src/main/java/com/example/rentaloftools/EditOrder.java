@@ -14,14 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /*
-Программный класс - наследник главной активности,
-для изменения параметров заказа в Таблице: "Orders"
+Программный класс для изменения параметров заказа в Таблице: "Orders"
  */
 public class EditOrder extends MainActivity implements View.OnClickListener {
     //Поля для ввода данных
     EditText editIdOrder, editIdClientOrder, editMoneyOrder, editStartdateOrder,
            editTimeOrder, editStatusOrder, editIdInstrumentsOrder;
-    //Кнопка сохранения измененного клиента в Таблицу: "Orders"
+    //Кнопка сохранения измененного заказа в Таблицу: "Orders"
     Button btnSave;
     //Кнопка отображения параметров выбранного заказа
     Button btnShow;
@@ -50,7 +49,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
         //Получаем интерфейс для чтения и записи значений результата запроса в БД
         Cursor cursor = db.rawQuery("SELECT * FROM Orders", null);
         cursor.moveToLast();
-        //Количество строк в Таблице: "Orders"
+        //Получаем количество строк из Таблицы: "Orders"
         countOrders= cursor.getInt(0);
         //Устанавливаем в поле для ввода id - номер последнего заказа
         editIdOrder.setText(String.valueOf(countOrders));
@@ -58,7 +57,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        //Используется для обновления параметров клиента
+        //Используется для обновления параметров заказа
         ContentValues cv = new ContentValues();
         Toast messageInt = Toast.makeText(getApplicationContext(), "Данные id заказа, стоимость заказа, id клиента, статус заказа должны быть числовыми", Toast.LENGTH_LONG);
         Toast messageIdNull = Toast.makeText(getApplicationContext(), "Пустое поле - id заказа", Toast.LENGTH_LONG);
@@ -97,7 +96,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                 cursor.close();
                 break;
             case R.id.saveOrder:
-                //Обработка не числовых значений ввода
+                //Обработка ошибок возникающих в случае ввода текстовых данных в числовые поля
                 try{
                     int id1 = Integer.parseInt(editIdOrder.getText().toString());
                     int idClient1 = Integer.parseInt(editIdClientOrder.getText().toString());
@@ -114,9 +113,11 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                             messageInt.cancel();
                         }
                     }, 2000);
+                    //Устанавливаем кнопке "Показать" свойство "setClickable(false)"
                     btnShow.setClickable(false);
                     break;
                 }
+                //Добавляем данные в контекст
                 cv.put("id", id);
                 cv.put("money", money);
                 cv.put("startdate", startdate);
@@ -124,8 +125,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                 cv.put("idClient", idClient);
                 cv.put("idInstruments", idInstruments);
                 cv.put("status", status);
-                //Обработка пустого ввода
-                //Обработка пустого ввода
+                //Обработка пустого ввода id заказа
                 if (id.equals("")) {
                     messageIdNull.show();
                     messageIdNull.setGravity(Gravity.CENTER, 0, 0);
@@ -139,6 +139,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода стоимости заказа
                 if (money.equals("")) {
                     messageMoneyNull.show();
                     messageMoneyNull.setGravity(Gravity.CENTER, 0, 0);
@@ -152,6 +153,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода даты заказа
                 if (startdate.equals("")) {
                     messageStartdateNull.show();
                     messageStartdateNull.setGravity(Gravity.CENTER, 0, 0);
@@ -165,6 +167,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода времени аренды
                 if (time.equals("")) {
                     messageTimeNull.show();
                     messageTimeNull.setGravity(Gravity.CENTER, 0, 0);
@@ -178,6 +181,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода id клиента для заказа
                 if (idClient.equals("")) {
                     messageIdClientNull.show();
                     messageIdClientNull.setGravity(Gravity.CENTER, 0, 0);
@@ -191,6 +195,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода id инструментов для заказа
                 if (idInstruments.equals("")) {
                     messageIdInstrumentsNull.show();
                     messageIdInstrumentsNull.setGravity(Gravity.CENTER, 0, 0);
@@ -204,6 +209,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                     }, 2000);
                     break;
                 }
+                //Обработка пустого ввода статуса заказа
                 if (status.equals("")) {
                     messageStatusNull.show();
                     messageStatusNull.setGravity(Gravity.CENTER, 0, 0);
@@ -218,7 +224,7 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                     break;
                 }
                 try{
-                    //Изменяем параметры инструмента в Таблице: "Orders"
+                    //Изменяем параметры заказа в Таблице: "Orders"
                     int updateCount = (int) db.update("Orders", cv, "id = " + id, null);
                     System.out.println(updateCount);
                     //Обнавляем статусы аренды для инструментов
