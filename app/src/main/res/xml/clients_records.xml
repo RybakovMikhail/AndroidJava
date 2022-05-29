@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<clients>
+    <record id ="1" name="Иванов Иван Иванович" phones="89157453249" individualDiscount="0" />
+    <record id ="2" name="Рыбаков Михаил Анатольевич" phones="89623333249" individualDiscount="0" />
+    <record id ="3" name="Петров Алексей Михайлович" phones="89534893249" individualDiscount="0" />
+    <record id ="4" name="Сидоров Павел Матвеевич" phones="89105453249" individualDiscount="10" />
+    <record id ="5" name="Родионов Максим Иванович" phones="89007457319" individualDiscount="20" />
+</clients>
