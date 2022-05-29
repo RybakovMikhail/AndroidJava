@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/user/AndroidStudioProjects/RentalOfTools/app/src/main/res/drawable-v24/EditTextStyle.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/RentalOfTools/app/src/main/res/drawable-v24/rec_main.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/RentalOfTools/app/src/main/res/drawable-v24/roundedbutton.xml" value="0.1" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/RentalOfTools/app/src/main/res/drawable-v24/stedit.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/RentalOfTools/app/src/main/res/drawable/editTextStyle.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/RentalOfTools/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="..\:/Users/user/AndroidStudioProjects/RentalOfTools/app/src/main/res/layout/activity_addclient.xml" value="0.1" />

@@ -27,6 +27,7 @@
         android:layout_width="100dp"
         android:layout_height="70dp"
         android:gravity="center"
+        android:background="@drawable/stedit"
         android:textSize="20sp">
         <requestFocus>
         </requestFocus>
