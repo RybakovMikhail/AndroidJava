@@ -24,8 +24,9 @@
 
     <EditText
         android:id="@+id/addIdClient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@drawable/stedit"
         android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold">
@@ -57,8 +58,9 @@
 
     <EditText
         android:id="@+id/addNameClient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@drawable/stedit"
         android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold"/>
@@ -87,8 +89,9 @@
 
     <EditText
         android:id="@+id/addPhonesClient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@drawable/stedit"
         android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold"/>
@@ -118,8 +121,9 @@
 
     <EditText
         android:id="@+id/addIndividualDiscount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:background="@drawable/stedit"
         android:text="0"
         android:gravity="center"
         android:textSize="20sp"
@@ -136,6 +140,7 @@
         android:id="@+id/saveclient"
         android:layout_width="200dp"
         android:layout_height="70dp"
+        android:background = "@drawable/roundedbutton"
         android:gravity="center"
         android:textSize="20sp"
         android:text="Сохранить"/>
