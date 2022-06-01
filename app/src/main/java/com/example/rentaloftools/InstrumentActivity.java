@@ -78,10 +78,10 @@ public class InstrumentActivity extends MainActivity implements View.OnClickList
         while (!cursor.isAfterLast()) {
             instrument = new HashMap<String, Object>();
             //Заполняем инструмент для отображения
-            instrument.put("id", "id: " + cursor.getString(0));
-            instrument.put("name", "name: " + cursor.getString(1));
-            instrument.put("rentalFees", "rentalFees: " + cursor.getString(2));
-            instrument.put("rentStatus", "rentStatus: " + cursor.getString(3));
+            instrument.put("id", "id инструмента: " + cursor.getString(0));
+            instrument.put("name", "название: " + cursor.getString(1));
+            instrument.put("rentalFees", "стоимость аренды: " + cursor.getString(2) + " руб.");
+            instrument.put("rentStatus", "статус: " + cursor.getString(3));
             //Добавляем инструмент в список
             instruments.add(instrument);
             //Переходим к следующему

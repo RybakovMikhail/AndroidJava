@@ -58,7 +58,7 @@
 
     <EditText
         android:id="@+id/addNameClient"
-        android:layout_width="250dp"
+        android:layout_width="350dp"
         android:layout_height="40dp"
         android:background="@drawable/stedit"
         android:gravity="center"

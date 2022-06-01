@@ -78,13 +78,13 @@ public class OrderActivity extends MainActivity implements View.OnClickListener 
         while (!cursor.isAfterLast()) {
             order = new HashMap<String, Object>();
             //Заполняем заказ для отображения
-            order.put("id", "id: " + cursor.getString(cursor.getColumnIndex("id")));
-            order.put("money", "money: " + cursor.getString(cursor.getColumnIndex("money")));
-            order.put("startdate", "startdate: " + cursor.getString(cursor.getColumnIndex("startdate")));
-            order.put("time", "time: " + cursor.getString(cursor.getColumnIndex("time")));
-            order.put("idClient", "idClient: " + cursor.getString(cursor.getColumnIndex("idClient")));
-            order.put("idInstruments", "idInstruments: " + cursor.getString(cursor.getColumnIndex("idInstruments")));
-            order.put("status", "status: " + cursor.getString(cursor.getColumnIndex("status")));
+            order.put("id", "id заказа: " + cursor.getString(cursor.getColumnIndex("id")));
+            order.put("money", "стоимость: " + cursor.getString(cursor.getColumnIndex("money")) + " руб.");
+            order.put("startdate", "дата: " + cursor.getString(cursor.getColumnIndex("startdate")));
+            order.put("time", "время аренды: " + cursor.getString(cursor.getColumnIndex("time")));
+            order.put("idClient", "номер клиента: " + cursor.getString(cursor.getColumnIndex("idClient")));
+            order.put("idInstruments", "инструменты: " + cursor.getString(cursor.getColumnIndex("idInstruments")));
+            order.put("status", "статус: " + cursor.getString(cursor.getColumnIndex("status")));
             //Добавляем заказ в список
             orders.add(order);
             //Переходим к следующему

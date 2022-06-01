@@ -78,10 +78,10 @@ public class ClientActivity extends MainActivity implements View.OnClickListener
         while (!cursor.isAfterLast()) {
             client = new HashMap<String, Object>();
             //Заполняем клиента для отображения
-            client.put("id", "id: " + cursor.getString(0));
-            client.put("name", "name: " + cursor.getString(1));
-            client.put("phones", "phones: " + cursor.getString(2));
-            client.put("individualDiscount", "individualDiscount: " + cursor.getString(3));
+            client.put("id", "id клиента: " + cursor.getString(0));
+            client.put("name", "ФИО: " + cursor.getString(1));
+            client.put("phones", "телефон: " + cursor.getString(2));
+            client.put("individualDiscount", "скидка: " + cursor.getString(3) + " %");
             //Добавляем клиента в список
             clients.add(client);
             //Переходим к следующему

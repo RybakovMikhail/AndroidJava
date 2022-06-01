@@ -10,6 +10,7 @@ import android.util.Log;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 /**
  * Класс для работы с БД "ProcatDB"
