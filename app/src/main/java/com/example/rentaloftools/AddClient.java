@@ -87,7 +87,7 @@ public class AddClient extends MainActivity implements View.OnClickListener {
                 //Добавляем данные в контекст
                 cv.put("id", id);
                 cv.put("name", name);
-                //Формат номера телефона.
+                //Формат номера телефона
                 phones = phones.substring(0,1) + "("+phones.substring(1,4) + ")"+phones.substring(4,phones.length());
                 cv.put("phones", phones);
                 cv.put("individualDiscount", individualDiscount);
