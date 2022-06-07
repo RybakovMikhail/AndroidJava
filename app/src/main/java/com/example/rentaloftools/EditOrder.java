@@ -226,7 +226,6 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
                 try{
                     //Изменяем параметры заказа в Таблице: "Orders"
                     int updateCount = (int) db.update("Orders", cv, "id = " + id, null);
-                    System.out.println(updateCount);
                     //Обнавляем статусы аренды для инструментов
                     db.execSQL("UPDATE Instruments SET rentStatus = 0 WHERE id IN (" + idInstruments + ")");
                     //В случае удачного обновления параметров запроса возвращаемся на родительскую активность

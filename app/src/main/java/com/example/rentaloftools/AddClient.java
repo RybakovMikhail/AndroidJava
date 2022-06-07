@@ -88,6 +88,7 @@ public class AddClient extends MainActivity implements View.OnClickListener {
                 cv.put("id", id);
                 cv.put("name", name);
                 //Формат номера телефона
+                if(phones.length() > 5)
                 phones = phones.substring(0,1) + "("+phones.substring(1,4) + ")"+phones.substring(4,phones.length());
                 cv.put("phones", phones);
                 cv.put("individualDiscount", individualDiscount);
@@ -149,12 +150,12 @@ public class AddClient extends MainActivity implements View.OnClickListener {
                 }
                 try{
                     //Вставляем в Таблицу: "Clients" нового клиента
-                     int addCount = (int) db.insert("Clients", null, cv);
+                    int addCount = (int) db.insert("Clients", null, cv);
                     //В случае удачного добавления клиента возвращаемся на родительскую активность
                     if (addCount == (countClients + 1)) {onBackPressed();}
                 }
-                //В случае если произошла ошибка при добавлении клиента в SQL запросе
                 catch(android.database.sqlite.SQLiteConstraintException e){
+                    //В случае если произошла ошибка при добавлении клиента в SQL запросе
                     messageSQL.show();
                     messageSQL.setGravity(Gravity.CENTER, 0, 0);
                         ((TextView)((LinearLayout)messageSQL.getView()).getChildAt(0))

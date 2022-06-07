@@ -2,6 +2,7 @@ package com.example.rentaloftools;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +20,7 @@ public class MainActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Создание объекта для БД
-        dbHelper = new DBHelper(this);
+        //dbHelper = new DBHelper(this);
         //Установка заголовка
         setTitle("Прокат инструментов");
         //Обработка кнопок
@@ -29,6 +30,13 @@ public class MainActivity extends Activity implements OnClickListener {
         btnInstruments.setOnClickListener(this);
         btnOrders = (Button) findViewById(R.id.orders);
         btnOrders.setOnClickListener(this);
+        //Поток для подключения к БД
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                dbHelper = new DBHelper(getApplicationContext());
+            }
+        }).start();
     }
 
     @Override
@@ -56,5 +64,4 @@ public class MainActivity extends Activity implements OnClickListener {
         //Закрываем подключение к БД
         dbHelper.close();
     }
-
 }

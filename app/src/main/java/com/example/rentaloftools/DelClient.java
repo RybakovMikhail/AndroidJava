@@ -64,14 +64,14 @@ public class DelClient extends MainActivity implements View.OnClickListener {
                         message.show();
                         message.setGravity(Gravity.CENTER, 0, 0);
                         ((TextView)((LinearLayout)message.getView()).getChildAt(0))
-                                .setGravity(Gravity.CENTER_HORIZONTAL);
+                                        .setGravity(Gravity.CENTER_HORIZONTAL);
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                message.cancel();
+                                        message.cancel();
+                                    }
+                                }, 2000);
                             }
-                        }, 2000);
-                        }
                 }
                 //Обработка в случае, если произошла ошибка в запросе SQL при удалении клиента
                 catch(android.database.sqlite.SQLiteException e){

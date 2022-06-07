@@ -3,6 +3,7 @@ package com.example.rentaloftools;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -165,7 +166,6 @@ public class EditClient extends MainActivity implements View.OnClickListener {
                 try{
                     //Изменяем параметры инструмента в Таблице: "Clients"
                     int updateCount = (int) db.update("Clients", cv, "id = " + id, null);
-                    System.out.println(updateCount);
                     //В случае удачного обновления параметров клиента возвращаемся на родительскую активность
                     if (updateCount == 1) {onBackPressed();}
                     if (updateCount == 0) {
@@ -181,8 +181,8 @@ public class EditClient extends MainActivity implements View.OnClickListener {
                         }, 2000);
                     }
                 }
-                //В случае если произошла ошибка в запросе на обновление
                 catch(android.database.sqlite.SQLiteConstraintException e){
+                    //В случае если произошла ошибка в запросе на обновление
                     messageSQL.show();
                     messageSQL.setGravity(Gravity.CENTER, 0, 0);
                         ((TextView)((LinearLayout)messageSQL.getView()).getChildAt(0))
