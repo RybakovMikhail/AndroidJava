@@ -49,10 +49,13 @@ public class EditOrder extends MainActivity implements View.OnClickListener {
         //Получаем интерфейс для чтения и записи значений результата запроса в БД
         Cursor cursor = db.rawQuery("SELECT * FROM Orders", null);
         cursor.moveToLast();
-        //Получаем количество строк из Таблицы: "Orders"
-        countOrders= cursor.getInt(0);
-        //Устанавливаем в поле для ввода id - номер последнего заказа
-        editIdOrder.setText(String.valueOf(countOrders));
+        //Если в Таблице: "Orders" есть заказы
+        if (cursor.getCount() != 0) {
+            //Получаем количество строк из Таблицы: "Orders"
+            countOrders = cursor.getInt(0);
+            //Устанавливаем в поле для ввода id - номер последнего заказа
+            editIdOrder.setText(String.valueOf(countOrders));
+        }
     }
 
     @Override
